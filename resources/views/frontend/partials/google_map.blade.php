@@ -84,7 +84,10 @@
             //Location details
             for (var i = 0; i < place.address_components.length; i++) {
                 if(place.address_components[i].types[0] == 'postal_code'){
-                    document.getElementById('postal_code').innerHTML = place.address_components[i].long_name;
+                    const pc = document.getElementById('postal_code');
+                    if (pc) {
+                        pc.innerHTML = place.address_components[i].long_name;
+                    }
                 }
                 if(place.address_components[i].types[0] == 'country'){
                     document.getElementById('country').innerHTML = place.address_components[i].long_name;

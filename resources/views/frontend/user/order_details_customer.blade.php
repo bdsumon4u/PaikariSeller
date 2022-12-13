@@ -36,7 +36,9 @@
                             <td class="w-50 fw-600">{{ translate('Shipping address') }}:</td>
                             <td>{{ json_decode($order->shipping_address)->address }},
                                 {{ json_decode($order->shipping_address)->city }},
+                                @if (config('other.postal_code'))
                                 {{ json_decode($order->shipping_address)->postal_code }},
+                                @endif
                                 {{ json_decode($order->shipping_address)->country }}</td>
                         </tr>
                     </table>

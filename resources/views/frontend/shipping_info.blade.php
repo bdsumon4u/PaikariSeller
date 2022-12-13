@@ -65,10 +65,12 @@
                                                         <span class="opacity-60">{{ translate('Address') }}:</span>
                                                         <span class="fw-600 ml-2">{{ $address->address }}</span>
                                                     </div>
+                                                    @if (config('other.postal_code'))
                                                     <div>
                                                         <span class="opacity-60">{{ translate('Postal Code') }}:</span>
                                                         <span class="fw-600 ml-2">{{ $address->postal_code }}</span>
                                                     </div>
+                                                    @endif
                                                     <div>
                                                         <span class="opacity-60">{{ translate('City') }}:</span>
                                                         <span class="fw-600 ml-2">{{ optional($address->city)->name }}</span>

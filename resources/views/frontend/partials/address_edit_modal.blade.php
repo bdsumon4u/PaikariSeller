@@ -63,7 +63,9 @@
                 <div id="edit_map"></div>
                 <ul id="geoData">
                     <li style="display: none;">Full Address: <span id="location"></span></li>
+                    @if (config('other.postal_code'))
                     <li style="display: none;">Postal Code: <span id="postal_code"></span></li>
+                    @endif
                     <li style="display: none;">Country: <span id="country"></span></li>
                     <li style="display: none;">Latitude: <span id="lat"></span></li>
                     <li style="display: none;">Longitude: <span id="lon"></span></li>
@@ -88,6 +90,7 @@
             </div>
         @endif
         
+        @if (config('other.postal_code'))
         <div class="row">
             <div class="col-md-2">
                 <label>{{ translate('Postal code')}}</label>
@@ -96,6 +99,7 @@
                 <input type="text" class="form-control mb-3" placeholder="{{ translate('Your Postal Code')}}" value="{{ $address_data->postal_code }}" name="postal_code" value="" required>
             </div>
         </div>
+        @endif
         <div class="row">
             <div class="col-md-2">
                 <label>{{ translate('Phone')}}</label>

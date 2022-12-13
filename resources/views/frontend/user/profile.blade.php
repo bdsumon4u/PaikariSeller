@@ -80,10 +80,12 @@
                                 <span class="w-50 fw-600">{{ translate('Address') }}:</span>
                                 <span class="ml-2">{{ $address->address }}</span>
                             </div>
+                            @if (config('other.postal_code'))
                             <div>
                                 <span class="w-50 fw-600">{{ translate('Postal Code') }}:</span>
                                 <span class="ml-2">{{ $address->postal_code }}</span>
                             </div>
+                            @endif
                             <div>
                                 <span class="w-50 fw-600">{{ translate('City') }}:</span>
                                 <span class="ml-2">{{ optional($address->city)->name }}</span>
