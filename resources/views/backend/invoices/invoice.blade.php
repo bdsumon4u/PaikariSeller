@@ -135,13 +135,15 @@
 								<td>
                                     {{ $orderDetail->product->name }} 
                                     @if($orderDetail->variation != null) ({{ $orderDetail->variation }}) @endif
-                                    <br>
+                                    @if (config('other.invoice_sku'))
+									<br>
                                     <small>
                                         @php
                                             $product_stock = json_decode($orderDetail->product->stocks->first(), true);
                                         @endphp
                                         {{translate('SKU')}}: {{ $product_stock['sku'] }}
                                     </small>
+									@endif
                                 </td>
 								<td>
 									@if ($order->shipping_type != null && $order->shipping_type == 'home_delivery')
