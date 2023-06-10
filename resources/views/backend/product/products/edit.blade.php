@@ -314,7 +314,7 @@
                                     {{translate('Set Point')}}
                                 </label>
                                 <div class="col-md-6">
-                                    <input type="number" lang="en" min="0" value="{{ $product->earn_point }}" step="1" placeholder="{{ translate('1') }}" name="earn_point" class="form-control">
+                                    <input type="number" lang="en" min="0" value="{{ $product->earn_point }}" step="0.01" placeholder="{{ translate('1') }}" name="earn_point" class="form-control">
                                 </div>
                             </div>
                         @endif

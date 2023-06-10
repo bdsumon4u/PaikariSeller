@@ -10,6 +10,17 @@
     </div>
 </div>
 
+<!-- Error Meassages -->
+@if ($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+
 <form class="" action="{{route('seller.products.update', $product->id)}}" method="POST" enctype="multipart/form-data"
     id="choice_form">
     <div class="row gutters-5">
@@ -72,7 +83,7 @@
                         <div class="col-lg-8">
                             <input type="text" class="form-control" name="unit"
                                 placeholder="{{ translate('Unit (e.g. KG, Pc etc)') }}"
-                                value="{{$product->getTranslation('unit')}}" required>
+                                value="{{$product->getTranslation('unit', $lang)}}" required>
                         </div>
                     </div>
                     <div class="form-group row">

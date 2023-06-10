@@ -108,7 +108,7 @@
 				@endphp
 				<tr><td class="strong small gry-color">{{ translate('Bill to') }}:</td></tr>
 				<tr><td class="strong">{{ $shipping_address->name }}</td></tr>
-				<tr><td class="gry-color small">{{ $shipping_address->address }}, {{ $shipping_address->city }}, {{ $shipping_address->postal_code }}, {{ $shipping_address->country }}</td></tr>
+				<tr><td class="gry-color small">{{ $shipping_address->address }}, {{ $shipping_address->city }},  @if(isset(json_decode($order->shipping_address)->state)) {{ json_decode($order->shipping_address)->state }} - @endif {{ $shipping_address->postal_code }}, {{ $shipping_address->country }}</td></tr>
 				<tr><td class="gry-color small">{{ translate('Email') }}: {{ $shipping_address->email }}</td></tr>
 				<tr><td class="gry-color small">{{ translate('Phone') }}: {{ $shipping_address->phone }}</td></tr>
 			</table>
@@ -122,9 +122,7 @@
 						<th width="15%" class="text-left">{{ translate('Delivery Type') }}</th>
 	                    <th width="10%" class="text-left">{{ translate('Qty') }}</th>
 	                    <th width="15%" class="text-left">{{ translate('Unit Price') }}</th>
-						@if($hasTax = $order->orderDetails->sum('tax') != 0)
 	                    <th width="10%" class="text-left">{{ translate('Tax') }}</th>
-						@endif
 	                    <th width="15%" class="text-right">{{ translate('Total') }}</th>
 	                </tr>
 				</thead>
@@ -135,15 +133,13 @@
 								<td>
                                     {{ $orderDetail->product->name }} 
                                     @if($orderDetail->variation != null) ({{ $orderDetail->variation }}) @endif
-                                    @if (config('other.invoice_sku'))
-									<br>
+                                    <br>
                                     <small>
                                         @php
                                             $product_stock = json_decode($orderDetail->product->stocks->first(), true);
                                         @endphp
                                         {{translate('SKU')}}: {{ $product_stock['sku'] }}
                                     </small>
-									@endif
                                 </td>
 								<td>
 									@if ($order->shipping_type != null && $order->shipping_type == 'home_delivery')
@@ -166,10 +162,8 @@
 								</td>
 								<td class="">{{ $orderDetail->quantity }}</td>
 								<td class="currency">{{ single_price($orderDetail->price/$orderDetail->quantity) }}</td>
-								@if($hasTax)
 								<td class="currency">{{ single_price($orderDetail->tax/$orderDetail->quantity) }}</td>
-			                    @endif
-								<td class="text-right currency">{{ single_price($orderDetail->price+$orderDetail->tax) }}</td>
+			                    <td class="text-right currency">{{ single_price($orderDetail->price+$orderDetail->tax) }}</td>
 							</tr>
 		                @endif
 					@endforeach
@@ -204,12 +198,10 @@
 							            <th class="gry-color text-left">{{ translate('Shipping Cost') }}</th>
 							            <td class="currency">{{ single_price($order->orderDetails->sum('shipping_cost')) }}</td>
 							        </tr>
-									@if($hasTax)
 							        <tr class="border-bottom">
 							            <th class="gry-color text-left">{{ translate('Total Tax') }}</th>
 							            <td class="currency">{{ single_price($order->orderDetails->sum('tax')) }}</td>
 							        </tr>
-									@endif
 				                    <tr class="border-bottom">
 							            <th class="gry-color text-left">{{ translate('Coupon Discount') }}</th>
 							            <td class="currency">{{ single_price($order->coupon_discount) }}</td>
