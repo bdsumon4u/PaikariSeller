@@ -22,8 +22,10 @@
                             </div>
                         </div>
 
+                        @php($country = \App\Models\Country::where('name', 'Bangladesh')->firstOrFail())
+                        <input type="hidden" name="country_id" value="{{ $country->id }}">
                         <!-- Country -->
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-md-2">
                                 <label>{{ translate('Country')}}</label>
                             </div>
@@ -37,7 +39,7 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <!-- State -->
                         <div class="row">
@@ -46,7 +48,10 @@
                             </div>
                             <div class="col-md-10">
                                 <select class="form-control mb-3 aiz-selectpicker rounded-0" data-live-search="true" name="state_id" required>
-
+                                    <option value="">{{ translate('Select State') }}</option>
+                                    @foreach (\App\Models\State::where('country_id', $country->id)->where('status', 1)->get() as $key => $state)
+                                        <option value="{{ $state->id }}">{{ $state->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
